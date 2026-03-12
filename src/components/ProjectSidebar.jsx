@@ -1,12 +1,40 @@
-// Sidebar for selecting a project
+import { useState } from "react";
+
+// Sidebar for selecting and creating projects
 export default function ProjectSidebar({
   projects,
   selectedProjectId,
   onSelectProject,
+  onAddProject,
 }) {
+  // Local input state for new project name
+  const [newProjectName, setNewProjectName] = useState("");
+
+  // Submit a new project to the parent app
+  function handleAddProject() {
+    const trimmedName = newProjectName.trim();
+
+    if (!trimmedName) return;
+
+    onAddProject(trimmedName);
+    setNewProjectName("");
+  }
+
   return (
     <aside style={styles.sidebar}>
       <h2>Projects</h2>
+
+      <div style={styles.newProjectRow}>
+        <input
+          value={newProjectName}
+          onChange={(event) => setNewProjectName(event.target.value)}
+          placeholder="New project name"
+          style={styles.input}
+        />
+        <button onClick={handleAddProject} style={styles.addButton}>
+          Add
+        </button>
+      </div>
 
       {projects.map((project) => {
         const isActive = project.id === selectedProjectId;
@@ -34,6 +62,26 @@ const styles = {
     width: "280px",
     borderRight: "1px solid #ddd",
     padding: "16px",
+    background: "#fff",
+  },
+  newProjectRow: {
+    display: "flex",
+    gap: "8px",
+    marginBottom: "16px",
+  },
+  input: {
+    flex: 1,
+    padding: "8px",
+    border: "1px solid #ccc",
+    borderRadius: "6px",
+  },
+  addButton: {
+    padding: "8px 12px",
+    border: "1px solid #222",
+    background: "#222",
+    color: "#fff",
+    borderRadius: "6px",
+    cursor: "pointer",
   },
   projectButton: {
     display: "block",

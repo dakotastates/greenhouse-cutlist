@@ -8,6 +8,8 @@ export function aggregateCutList(componentsWithQuantities) {
   const totals = new Map();
 
   componentsWithQuantities.forEach(({ component, buildQuantity }) => {
+    if (!buildQuantity || buildQuantity <= 0) return;
+
     component.parts.forEach((part) => {
       const key = buildPartKey(part);
 
@@ -25,5 +27,5 @@ export function aggregateCutList(componentsWithQuantities) {
     });
   });
 
-  return Array.from(totals.values());
+  return Array.from(totals.values()).filter((item) => item.quantity > 0);
 }
